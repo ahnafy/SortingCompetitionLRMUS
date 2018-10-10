@@ -78,13 +78,20 @@ public class Group2 {
             scratch[index]++;
         }
 
+        // see how many of each lrmus length there is
+        System.out.println("Distribution of lengths:");
+        for(int i = 0; i < scratch.length; i++) {
+            System.out.println(i + ": " + scratch[i]);
+        }
+        System.out.println("End of distribution of lengths");
+
         for(int i = 1; i < k; i++) {
             scratch[i] += scratch[i-1];
         }
 
-        for(int j = toSort.length; j >= 0; j--) {
+        for(int j = toSort.length - 1; j >= 0; j--) {
             int index = toSortData[j].M_LRMUSLength();
-            output[scratch[index]] = toSortData[j];
+            output[scratch[index]-1] = toSortData[j];
             scratch[index]--;
         }
 
@@ -131,16 +138,20 @@ public class Group2 {
         public int compare(Data s1, Data s2) {
 
                         /* Length test */
-            if(s1.M_LRMUSLength() < s2.M_LRMUSLength()){return -1;}
-            if(s1.M_LRMUSLength() > s2.M_LRMUSLength()){return 1;}
+            int result = s1.M_LRMUSLength() - s2.M_LRMUSLength();
+            if(result != 0) {
+                return result;
+            }
 
                         /* Position test*/
-            if(s1.M_LRMUSPosition() < s2.M_LRMUSPosition()){return -1;}
-            if(s1.M_LRMUSPosition() > s2.M_LRMUSPosition()){return 1;}
+            result = s1.M_LRMUSPosition() - s2.M_LRMUSPosition();
+            if(result != 0) {
+                return result;
+            }
 
                         /* Alphabetical test */
-            int tmp = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
-            if(tmp!=0){return(tmp);}
+            result = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
+            if(result!=0){return(result);}
 
                         /* Fallback */
             return(s1.value().compareTo(s2.value())); //This too.
