@@ -110,18 +110,21 @@ public class Group0 {
 
                 @Override
                 public int compare(Data s1, Data s2) {
-
                         /* Length test */
-                        if(s1.M_LRMUSLength() < s2.M_LRMUSLength()){return -1;}
-                        if(s1.M_LRMUSLength() > s2.M_LRMUSLength()){return 1;}
+                        int result = s1.M_LRMUSLength() - s2.M_LRMUSLength();
+                        if(result != 0) {
+                                return result;
+                        }
 
                         /* Position test*/
-                        if(s1.M_LRMUSPosition() < s2.M_LRMUSPosition()){return -1;}
-                        if(s1.M_LRMUSPosition() > s2.M_LRMUSPosition()){return 1;}
+                        result = s1.M_LRMUSPosition() - s2.M_LRMUSPosition();
+                        if(result != 0) {
+                                return result;
+                        }
 
                         /* Alphabetical test */
-                        int tmp = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
-                        if(tmp!=0){return(tmp);}
+                        result = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
+                        if(result!=0){return(result);}
 
                         /* Fallback */
                         return(s1.value().compareTo(s2.value())); //This too.
