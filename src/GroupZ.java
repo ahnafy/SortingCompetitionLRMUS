@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.Scanner;
 import java.util.List;
 
-public class Group2 {
+public class GroupZ {
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException,IOException {
         // testing the comparator:
@@ -56,7 +56,11 @@ public class Group2 {
 
     }
 
-    // initially use counting sort to order elements by the length of M-LRMUS, then apply tiebreakers
+    // YOUR SORTING METHOD GOES HERE.
+    // You may call other methods and use other classes.
+    // Note: you may change the return type of the method.
+    // You would need to provide your own function that prints your sorted array to
+    // a file in the exact same format that my program outputs
     private static Data[] sort(String[] toSort) {
         Data[] toSortData = new Data[toSort.length];
         //System.out.print("\tBeginning Initialization...");
@@ -64,38 +68,13 @@ public class Group2 {
             toSortData[i] = new Data(toSort[i]);
         }
         //System.out.println("done!");
-        //Arrays.sort(toSortData, new M_LRMUSComparator());
-        int k = 81;
-        Data[] output = new Data[toSort.length];
-        int[] scratch = new int[k];
 
-        for(int i = 0; i < k; i++) {
-            scratch[i] = 0;
-        }
-
-        for(int j = 0; j < toSort.length; j++) {
-            int index = toSortData[j].M_LRMUSLength();
-            scratch[index]++;
-        }
-
-        // see how many of each lrmus length there is
-//        System.out.println("Distribution of lengths:");
-//        for(int i = 0; i < scratch.length; i++) {
-//            System.out.println(i + ": " + scratch[i]);
-//        }
-//        System.out.println("End of distribution of lengths");
-
-        for(int i = 1; i < k; i++) {
-            scratch[i] += scratch[i-1];
-        }
-
-        for(int j = toSort.length - 1; j >= 0; j--) {
-            int index = toSortData[j].M_LRMUSLength();
-            output[scratch[index]-1] = toSortData[j];
-            scratch[index]--;
-        }
-
-        return output;
+        // "radix sort" using the tie breakers as "digits"
+        Arrays.sort(toSortData, new Comparator1());
+        Arrays.sort(toSortData, new Comparator2());
+        Arrays.sort(toSortData, new Comparator3());
+        Arrays.sort(toSortData, new Comparator4());
+        return toSortData;
     }
 
     private static void printArray(String[] Arr, int n) {
@@ -132,26 +111,60 @@ public class Group2 {
 
     }
 
+    private static class Comparator4 implements Comparator<Data> {
+
+        @Override
+        public int compare(Data s1, Data s2) {
+
+                        /* Length test */
+            return s1.M_LRMUSLength() - s2.M_LRMUSLength();
+        }
+    }
+    private static class Comparator3 implements Comparator<Data> {
+
+        @Override
+        public int compare(Data s1, Data s2) {
+                        /* Position test*/
+            return s1.M_LRMUSPosition() - s2.M_LRMUSPosition();
+        }
+    }
+    private static class Comparator2 implements Comparator<Data> {
+
+        @Override
+        public int compare(Data s1, Data s2) {
+
+                        /* Alphabetical test */
+            int tmp = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
+            return(tmp);
+
+        }
+    }
+    private static class Comparator1 implements Comparator<Data> {
+
+        @Override
+        public int compare(Data s1, Data s2) {
+
+                        /* Fallback */
+            return(s1.value().compareTo(s2.value())); //This too.
+        }
+    }
+
     private static class M_LRMUSComparator implements Comparator<Data> {
 
         @Override
         public int compare(Data s1, Data s2) {
 
                         /* Length test */
-            int result = s1.M_LRMUSLength() - s2.M_LRMUSLength();
-            if(result != 0) {
-                return result;
-            }
+            if(s1.M_LRMUSLength() < s2.M_LRMUSLength()){return -1;}
+            if(s1.M_LRMUSLength() > s2.M_LRMUSLength()){return 1;}
 
                         /* Position test*/
-            result = s1.M_LRMUSPosition() - s2.M_LRMUSPosition();
-            if(result != 0) {
-                return result;
-            }
+            if(s1.M_LRMUSPosition() < s2.M_LRMUSPosition()){return -1;}
+            if(s1.M_LRMUSPosition() > s2.M_LRMUSPosition()){return 1;}
 
                         /* Alphabetical test */
-            result = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
-            if(result!=0){return(result);}
+            int tmp = s1.M_LRMUSStr().compareTo(s2.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
+            if(tmp!=0){return(tmp);}
 
                         /* Fallback */
             return(s1.value().compareTo(s2.value())); //This too.
