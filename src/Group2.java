@@ -14,7 +14,7 @@ public class Group2 {
 
     public static void main(String[] args) throws InterruptedException, FileNotFoundException,IOException {
         // testing the comparator:
-        Data.testM_LRMUS();
+//        Data.testM_LRMUS();
 
 
         if (args.length < 2) {
@@ -34,10 +34,7 @@ public class Group2 {
 
         String [] toSort = data.clone();
 
-        System.out.println("Beginning sort...");
         Data [] sorted = sort(toSort);
-        System.out.println("done");
-
 
         toSort = data.clone();
 
@@ -50,13 +47,70 @@ public class Group2 {
         long end = System.currentTimeMillis();
 
         System.out.println(end - start);
-        System.out.print("\tExporting sorted data to "+outFileName+"...");
         writeOutResult(sorted, outFileName);
-        System.out.println("done!");
 
     }
 
-    // initially use counting sort to order elements by the length of M-LRMUS, then apply tiebreakers
+    /**
+     * @param arr the array to be partitioned
+     * @param first
+     * @param last
+     * @return returns the pivot index. Elements from first to last-1 will be partitioned, so that everything less than
+     * the pivot is before the pivot, and everything greater than the pivot is after
+     */
+    private static int partition(Data[] arr, int first, int last) {
+        int pivotIndex = first;
+        Data pivotValue = arr[first];
+        int firstUnknown = pivotIndex+1;
+
+        while(firstUnknown<last) {
+            if (arr[firstUnknown].compareTo(pivotValue)<0) {
+                pivotIndex++;
+                Data tmp = arr[pivotIndex];
+                arr[pivotIndex] = arr[firstUnknown];
+                arr[firstUnknown] = tmp;
+            }
+            firstUnknown++;
+        }
+        arr[first] = arr[pivotIndex];
+        arr[pivotIndex] = pivotValue;
+        return pivotIndex;
+    }
+
+    /**
+     * @param arr the array to be sorted
+     * @param first
+     * @param last
+     * quicksort, but changes to insertion sort for the last 10 elements of each partition
+     */
+    public static void quicksertionSort(Data[] arr, int first, int last) {
+        if (last-first <= 10) {
+            insertionSort(arr, first, last);
+            return;
+        }
+        int pivotIndex = partition(arr, first, last);
+        quicksertionSort(arr, first, pivotIndex);
+        quicksertionSort(arr, pivotIndex+1, last);
+    }
+    /**
+     * @param arr
+     * @param first
+     * @param last
+     * implements the books version of insertion sort
+     */
+    public static void insertionSort(Data[] arr, int first, int last) {
+        for (int j = first + 1; j < last; j++) {
+            Data key = arr[j];
+            int i = j - 1;
+            while (i >= first && (arr[i].compareTo(key) > 0)) {
+                arr[i + 1] = arr[i];
+                i--;
+            }
+            arr[i + 1] = key;
+        }
+    }
+
+    //Quicksort that changes to insertion sort for the last 10 items
     private static Data[] sort(String[] toSort) {
         Data[] toSortData = new Data[toSort.length];
         //System.out.print("\tBeginning Initialization...");
@@ -65,37 +119,9 @@ public class Group2 {
         }
         //System.out.println("done!");
         //Arrays.sort(toSortData, new M_LRMUSComparator());
-        int k = 81;
-        Data[] output = new Data[toSort.length];
-        int[] scratch = new int[k];
+        quicksertionSort(toSortData, 0, toSortData.length);
 
-        for(int i = 0; i < k; i++) {
-            scratch[i] = 0;
-        }
-
-        for(int j = 0; j < toSort.length; j++) {
-            int index = toSortData[j].M_LRMUSLength();
-            scratch[index]++;
-        }
-
-        // see how many of each lrmus length there is
-//        System.out.println("Distribution of lengths:");
-//        for(int i = 0; i < scratch.length; i++) {
-//            System.out.println(i + ": " + scratch[i]);
-//        }
-//        System.out.println("End of distribution of lengths");
-
-        for(int i = 1; i < k; i++) {
-            scratch[i] += scratch[i-1];
-        }
-
-        for(int j = toSort.length - 1; j >= 0; j--) {
-            int index = toSortData[j].M_LRMUSLength();
-            output[scratch[index]-1] = toSortData[j];
-            scratch[index]--;
-        }
-
-        return output;
+        return toSortData;
     }
 
     private static void printArray(String[] Arr, int n) {
@@ -157,7 +183,30 @@ public class Group2 {
             return(s1.value().compareTo(s2.value())); //This too.
         }
     }
-    private static class Data {
+    private static class Data implements Comparable<Data>{
+
+        @Override
+        public int compareTo(Data o) {
+            /* Length test */
+            int result = this.M_LRMUSLength() - o.M_LRMUSLength();
+            if(result != 0) {
+                return result;
+            }
+
+            /* Position test*/
+            result = this.M_LRMUSPosition() - o.M_LRMUSPosition();
+            if(result != 0) {
+                return result;
+            }
+
+            /* Alphabetical test */
+            result = this.M_LRMUSStr().compareTo(o.M_LRMUSStr()); // NOTE:  This typically returns values outside the set {-1,0,1}, but the sign still determines ordering
+            if(result!=0){return(result);}
+
+            /* Fallback */
+            return(this.value().compareTo(o.value())); //This too.
+        }
+
         private class LRMUS{
             public int position=Integer.MAX_VALUE; // Initial Position is as bad as possible
             public int length=Integer.MIN_VALUE;                   // Initial Length is as bad as possible
