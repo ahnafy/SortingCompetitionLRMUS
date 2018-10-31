@@ -1,4 +1,4 @@
-##Sorting
+## Sorting
 
 First we tried to implement counting sort, because it runs in linear time and there are a limited number of lrmus lengths.
 However, it couldn't handle tiebreakers like alphabetical order because those don't fit counting sort.
@@ -12,7 +12,7 @@ runs slightly faster, and sorts the items correctly.
 
 We also modified the compareTo function, and we hoped it would be faster by using subtracting instead of a comparison, but it made no difference.
 
-##Finding the LRMUS
+## Finding the LRMUS
 We changed updateAt so that the string toMatch is always at least as long as the current lrmus, which saved
 about 100ms. Here's the change:
 ```
