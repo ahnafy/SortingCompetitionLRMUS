@@ -223,17 +223,11 @@ public class Group2 {
                     String toMatch=referenceStr.substring(start,end); //indices are 0-based so str.length is 1 more than the final index
 
                     int m=toMatch.length();
-                    if (m<length){ // If the string to match is shorter than our current best then we should skip to the next iteration
-                        continue;
-                    }
                     int testEnd=referenceStr.length()-m;
                     for(int testStart=0;testStart<=testEnd;testStart++){
                         String test=referenceStr.substring(testStart,testStart+m); // For each testable location extract the substring that's the same size as toMatch
                         if(toMatch.compareTo(test)==0){
                             matchCnt++;
-                            if(matchCnt > 1) {
-                                break;
-                            }
                         }
                     }
 //                    if(matchCnt==0){System.out.println("DANGER!  No Match in updateAt!  This should never happen");}
