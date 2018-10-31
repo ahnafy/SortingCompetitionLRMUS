@@ -209,7 +209,7 @@ public class Group2 {
 
         private class LRMUS{
             public int position=Integer.MAX_VALUE; // Initial Position is as bad as possible
-            public int length=Integer.MIN_VALUE;                   // Initial Length is as bad as possible
+            public int length=0;                   // Changed from Integer.MIN_VALUE to 0
             public String referenceStr;
 
             public LRMUS(String str){
@@ -218,21 +218,25 @@ public class Group2 {
 
             public void updateAt(int start){ //0-based position.  Will update LRMUS if there is an improvement at start
                 int n = referenceStr.length();
-                for(int end=start; end<n;end++){
+                for(int end=start + length; end<n;end++){ // changed this so that the string toMatch is always at least as long as the current lrmus
                     int matchCnt=0;
                     String toMatch=referenceStr.substring(start,end); //indices are 0-based so str.length is 1 more than the final index
 
                     int m=toMatch.length();
                     if (m<length){ // If the string to match is shorter than our current best then we should skip to the next iteration
                         continue;
-                        //break; // If the string to match is shorter than our current best length there's no reason to continue
                     }
                     int testEnd=referenceStr.length()-m;
                     for(int testStart=0;testStart<=testEnd;testStart++){
                         String test=referenceStr.substring(testStart,testStart+m); // For each testable location extract the substring that's the same size as toMatch
-                        if(toMatch.compareTo(test)==0){matchCnt++;}
+                        if(toMatch.compareTo(test)==0){
+                            matchCnt++;
+                            if(matchCnt > 1) {
+                                break;
+                            }
+                        }
                     }
-                    if(matchCnt==0){System.out.println("DANGER!  No Match in updateAt!  This should never happen");}
+//                    if(matchCnt==0){System.out.println("DANGER!  No Match in updateAt!  This should never happen");}
                     if(matchCnt==1){ // In this case the substring is unique.  If we are here than the match is at least as good as the previous best
                         if(m==this.length && start < this.position){// If it's a tie then we check position
                             this.position=start;
