@@ -1,6 +1,15 @@
 # SortingCompetition2018- UMN MORRIS
 
-## Our Sorting Solutions
+# Table of contents
+* [Our Sorting Solutions](#sorting)
+* [Goal of the competition](#goal)
+* [The data](#data)
+* [How is the data generated](#generating)
+* [String Feature Background](#stringbackground)
+* [How do you need to sort the data](#sortingRules)
+* [Setup for sorting](#setup)
+
+# Our Sorting Solutions <a name="sorting"></a>
 
 First we tried to implement counting sort, because it runs in linear time and there are a limited number of lrmus lengths.
 However, it couldn't handle tiebreakers like alphabetical order because those don't fit counting sort.
@@ -40,22 +49,6 @@ public void findBest(){
 All of the code was done together at the lab. We used pair programming where we switched from time to time.
 
 GroupZ was our attempt at radix sort. Our submission is Group2.
-
-
-# Table of contents
-* [Goal of the competition](#goal)
-* [The data](#data)
-* [How is the data generated](#generating)
-* [String Feature Background](#stringbackground)
-* [How do you need to sort the data](#sortingRules)
-* [Setup for sorting](#setup)
-* [Submision deadlines](#deadlines)
-* [Scoring](#scoring)
-* [System specs](#specs)
-* [Results of the first preliminary round](#round1)
-* [Results of the final competition](#final)
-* [Presentations](#presentation)
-
 
 ## Goal of the competition <a name="goal"></a>
 
@@ -142,51 +135,3 @@ Your program must print **the only value**, which is the **time** (as it current
 
 **Important:** if the sorting times may be too small to distinguish groups based on just one run of the sorting, so I may loop over the sorting section multiple times. If this is the case, I will let you know no later than a day after the preliminary competition and will modify `Group0` file accordingly.  
 
-## Submision deadlines <a name="deadlines"></a>
-
-See Canvas for the deadlines of this competition (if you're not in the class I'll send you a copy via email).
-
-*Thursday, Oct 25* in the lab is the *final* competition. All source code is posted immediately after that. Those in class will have their names revealed, others may choose to remain anonymous (but the code will still be posted). 
-
-## Scoring <a name="scoring"></a>
-
-The programs are tested on a few (between 1 and 3) data sets. For each data set each group's program is run three times, the median value counts. The groups are ordered by their median score for each data file and assigned places, from 1 to N. 
-
-The final score is given by the sum of places for all data sets. If the sum of places is equal for two groups, the sum of median times for all the runs resolves the tie. So if one group was first for one data set and third for the other one (2 sets total being run), it scored better than a group that was third for the first data set and second for the other. However, if one group was first for the first set and third for the other one, and the second group was second in both, the sum of times determines which one of them won since the sum of places is the same (1 + 3 = 2 + 2). 
-
-If a program has a compilation or a runtime error, doesn't sort correctly, or prints anything other than the total time in milliseconds, it gets a penalty of 1000000ms for that run. 
-
-## System specs <a name="specs"></a>
-
-The language used is Java 8 (as installed in the CSci lab). It's ran on a single CPU core.  
-
-I will post a script for running this program (with a correctness check and all), but for now a couple of things to know: run your program out of `/tmp` directory to avoid overhead of communications with the file server, and pin your program to a single core, i.e. run it like this:
-``taskset -c 0 java GroupN``
-
-## Results of the first preliminary round <a name="round1"></a>
-
-This round will occur October 11th 2018
-*Result of the first round will be posted here*
-
-## Results of the competition <a name="final"></a>
-
-*results of the final round will be posted here*
-
-## Presentations <a name="presentation"></a>
-
-The presentations date will November 1st . Each group needs to submit a
-set of 4-5 pdf slides by 11:59pm the day before the presentation; you will have 3-4 minutes to present. Both group members must be a part of a presentation. The presentation must have:
-
-* Your names (first names ok since this will be on github) and group number,
-* Your results of the competition (overall place, times, correctness). If there were any correctness concerns, they need to be addressed.
-* Big-picture description of your algorithm and data representation (what sorting have you used?
-what were you storing? Precomputing?)
-* The theoretical worst case efficiency and expected efficiency. For instance, insertion sort in theory has a quadratic efficiency, but if you are using it only on almost-sorted data, it's close to linear.
-* The most intersting features of your algorithm.
-* What worked, what didn't, what you would've done differently.
-
-Be prepared to answer questions. 
-
-## Final write-up <a name="writeup"></a>
-
-*details will be posted here*
